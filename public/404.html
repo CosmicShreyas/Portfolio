@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>404 | Shreyas</title>
+    <meta
+      name="description"
+      content="A quiet bird stayed on watch, but the page never appeared."
+    />
+    <style>
+      :root {
+        --background: #171510;
+        --ink: #efe5d6;
+        --charcoal: #b2a28f;
+        --muted-warm: #8e7d69;
+        --warm: #5d5042;
+        --coral: #e26d5a;
+        --gold: #d7b96f;
+        --primary-foreground: #1a1512;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        background: var(--background);
+        color: var(--ink);
+        font-family: Georgia, "Times New Roman", serif;
+      }
+
+      body {
+        position: relative;
+        overflow: hidden;
+        background:
+          radial-gradient(circle at 18% 20%, rgba(226, 109, 90, 0.08), transparent 22rem),
+          radial-gradient(circle at 82% 78%, rgba(215, 185, 111, 0.05), transparent 24rem),
+          linear-gradient(180deg, #171510 0%, #13110d 100%);
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        opacity: 0.3;
+        pointer-events: none;
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        background-size: 18px 18px;
+      }
+
+      .page {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        grid-template-columns: minmax(0, 1.02fr) minmax(320px, 0.98fr);
+        align-items: center;
+        gap: 3rem;
+        min-height: 100vh;
+        max-width: 88rem;
+        margin: 0 auto;
+        padding: 3rem 1.5rem;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-family: "Courier New", monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.32em;
+        text-transform: uppercase;
+        color: var(--muted-warm);
+      }
+
+      .eyebrow::before {
+        content: "";
+        width: 3rem;
+        height: 1px;
+        background: linear-gradient(90deg, var(--coral), transparent);
+      }
+
+      h1 {
+        margin: 1.5rem 0 0;
+        max-width: 12ch;
+        font-size: clamp(3.5rem, 8vw, 7rem);
+        line-height: 0.9;
+        font-weight: 500;
+      }
+
+      h1 em {
+        color: var(--coral);
+        font-style: italic;
+      }
+
+      p {
+        margin: 1.5rem 0 0;
+        max-width: 42rem;
+        color: var(--charcoal);
+        font-size: clamp(1rem, 1.8vw, 1.25rem);
+        line-height: 1.75;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-top: 2rem;
+      }
+
+      .button,
+      .ghost {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        padding: 1rem 1.5rem;
+        text-decoration: none;
+        font-family: "Courier New", monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        transition: transform 160ms ease, border-color 160ms ease, color 160ms ease;
+      }
+
+      .button {
+        background: var(--coral);
+        color: var(--primary-foreground);
+        font-weight: 700;
+        box-shadow: 0 18px 40px -20px rgba(226, 109, 90, 0.4);
+      }
+
+      .ghost {
+        color: var(--ink);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+      }
+
+      .button:hover,
+      .ghost:hover {
+        transform: translateY(-2px);
+      }
+
+      .ghost:hover {
+        color: var(--coral);
+        border-color: rgba(226, 109, 90, 0.45);
+      }
+
+      .scene {
+        position: relative;
+        min-height: 28rem;
+        overflow: hidden;
+        border-radius: 2rem;
+        border: 1px solid rgba(226, 109, 90, 0.25);
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0.008)),
+          rgba(23, 21, 16, 0.38);
+      }
+
+      .scene::after {
+        content: "";
+        position: absolute;
+        inset: auto 0 0;
+        height: 8rem;
+        background: radial-gradient(circle at 50% 100%, rgba(226, 109, 90, 0.12), transparent 42%);
+      }
+
+      .cloud {
+        position: absolute;
+        left: 0;
+      }
+
+      .cloud-1 {
+        top: 4rem;
+        width: 10rem;
+        height: 5rem;
+        animation: drift 28s linear infinite;
+      }
+
+      .cloud-2 {
+        top: 10rem;
+        width: 10rem;
+        height: 5rem;
+        opacity: 0.9;
+        animation: drift-slow 34s linear infinite 1.2s;
+      }
+
+      .puff {
+        position: absolute;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.55);
+      }
+
+      .cloud-1 .puff:nth-child(1) {
+        left: 2rem;
+        top: 1rem;
+        width: 5rem;
+        height: 3rem;
+      }
+
+      .cloud-1 .puff:nth-child(2) {
+        left: 0;
+        top: 2rem;
+        width: 7rem;
+        height: 3.5rem;
+      }
+
+      .cloud-1 .puff:nth-child(3) {
+        left: 3.5rem;
+        top: 0;
+        width: 7rem;
+        height: 4rem;
+      }
+
+      .cloud-1 .puff:nth-child(4) {
+        left: 6rem;
+        top: 1.75rem;
+        width: 6rem;
+        height: 3rem;
+      }
+
+      .cloud-2 .puff:nth-child(1) {
+        left: 1.5rem;
+        top: 0.75rem;
+        width: 4rem;
+        height: 2.4rem;
+      }
+
+      .cloud-2 .puff:nth-child(2) {
+        left: 0;
+        top: 1.5rem;
+        width: 6rem;
+        height: 3rem;
+      }
+
+      .cloud-2 .puff:nth-child(3) {
+        left: 3rem;
+        top: 0;
+        width: 4.5rem;
+        height: 2.8rem;
+      }
+
+      .cloud-2 .puff:nth-child(4) {
+        left: 5.5rem;
+        top: 1.25rem;
+        width: 4rem;
+        height: 2.5rem;
+      }
+
+      .bird-wrap {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .bird {
+        width: min(170px, 40vw);
+        height: auto;
+        overflow: visible;
+        filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.35));
+        animation: bob 4.6s ease-in-out infinite;
+      }
+
+      @keyframes drift {
+        from {
+          transform: translateX(-30%);
+        }
+        to {
+          transform: translateX(130%);
+        }
+      }
+
+      @keyframes drift-slow {
+        from {
+          transform: translateX(-35%);
+        }
+        to {
+          transform: translateX(135%);
+        }
+      }
+
+      @keyframes bob {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-12px);
+        }
+      }
+
+      @media (max-width: 960px) {
+        body {
+          overflow: auto;
+        }
+
+        .page {
+          grid-template-columns: 1fr;
+          min-height: auto;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation: none !important;
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <section>
+        <div class="eyebrow">404</div>
+        <h1>
+          A quiet <em>bird</em> stayed on watch, but the page never appeared.
+        </h1>
+        <p>
+          This route drifted away somewhere between the address bar and the build.
+          Let&apos;s head back to familiar ground.
+        </p>
+        <div class="actions">
+          <a class="button" id="home-link" href="/">Back home -&gt;</a>
+          <a class="ghost" href="https://github.com/CosmicShreyas">Visit GitHub -&gt;</a>
+        </div>
+      </section>
+
+      <section class="scene" aria-hidden="true">
+        <div class="cloud cloud-1">
+          <div class="puff"></div>
+          <div class="puff"></div>
+          <div class="puff"></div>
+          <div class="puff"></div>
+        </div>
+        <div class="cloud cloud-2">
+          <div class="puff"></div>
+          <div class="puff"></div>
+          <div class="puff"></div>
+          <div class="puff"></div>
+        </div>
+
+        <div class="bird-wrap">
+          <svg class="bird" viewBox="0 0 170 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M36 67C48 44 68 32 94 31C82 42 74 53 70 67C58 66 48 66 36 67Z" fill="#171310" />
+            <path d="M95 31C120 32 139 45 154 68C139 66 126 66 114 67C110 54 104 42 95 31Z" fill="#1D1815" />
+            <ellipse cx="88" cy="71" rx="23" ry="13" fill="#14110E" />
+            <circle cx="109" cy="67" r="8.5" fill="#14110E" />
+            <path d="M116 67L131 62L118 71L116 67Z" fill="#E4C67A" />
+            <circle cx="111.5" cy="65.5" r="1.8" fill="#F6ECDD" />
+            <path d="M82 82L73 97" stroke="#14110E" stroke-width="3.5" stroke-linecap="round" />
+            <path d="M95 82L104 98" stroke="#14110E" stroke-width="3.5" stroke-linecap="round" />
+          </svg>
+        </div>
+      </section>
+    </main>
+    <script>
+      (function () {
+        var homeLink = document.getElementById("home-link");
+        if (!homeLink) return;
+
+        var isGithubPages = /\.github\.io$/i.test(window.location.hostname);
+        if (!isGithubPages) return;
+
+        var parts = window.location.pathname.split("/").filter(Boolean);
+        homeLink.setAttribute("href", parts.length ? "/" + parts[0] + "/" : "/");
+      })();
+    </script>
+  </body>
+</html>

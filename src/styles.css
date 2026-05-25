@@ -1,0 +1,373 @@
+@import "tailwindcss" source(none);
+@import "tw-animate-css";
+@source "../src";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Portfolio palette tokens */
+  --color-parchment: var(--parchment);
+  --color-parchment-2: var(--parchment-2);
+  --color-ink: var(--ink);
+  --color-charcoal: var(--charcoal);
+  --color-coral: var(--coral);
+  --color-terracotta: var(--terracotta);
+  --color-terracotta-2: var(--terracotta-2);
+  --color-gold: var(--gold);
+  --color-muted-warm: var(--muted-warm);
+
+  --font-serif: "Playfair Display", "DM Serif Display", Georgia, serif;
+  --font-mono: "JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace;
+}
+
+:root {
+  --radius: 0.625rem;
+
+  /* Brand palette */
+  --parchment: #e8dfca;
+  --parchment-2: #ebe3ce;
+  --ink: #1a1714;
+  --charcoal: #3d3a33;
+  --coral: #e26d5a;
+  --terracotta: #db815e;
+  --terracotta-2: #d8724d;
+  --gold: #a37153;
+  --muted-warm: #928b7b;
+
+  /* Semantic */
+  --background: var(--parchment);
+  --foreground: var(--ink);
+  --card: var(--parchment-2);
+  --card-foreground: var(--ink);
+  --popover: var(--parchment-2);
+  --popover-foreground: var(--ink);
+  --primary: var(--coral);
+  --primary-foreground: #fff8ef;
+  --secondary: var(--parchment-2);
+  --secondary-foreground: var(--ink);
+  --muted: var(--parchment-2);
+  --muted-foreground: var(--muted-warm);
+  --accent: var(--coral);
+  --accent-foreground: #fff8ef;
+  --destructive: #b3271a;
+  --destructive-foreground: #fff8ef;
+  --border: color-mix(in oklab, var(--muted-warm) 35%, transparent);
+  --input: color-mix(in oklab, var(--muted-warm) 30%, transparent);
+  --ring: var(--coral);
+  --mosaic-line-a: rgb(163 113 83 / 16%);
+  --mosaic-line-b: rgb(226 109 90 / 14%);
+  --mosaic-line-c: rgb(255 248 239 / 22%);
+  --mosaic-line-d: rgb(122 79 58 / 10%);
+  --mosaic-opacity: 0.075;
+}
+
+.dark {
+  --parchment: #191814;
+  --parchment-2: #161510;
+  --ink: #e8dfca;
+  --charcoal: #c9c2ad;
+  --background: #191814;
+  --foreground: #e8dfca;
+  --card: #1f1d18;
+  --card-foreground: #e8dfca;
+  --popover: #1f1d18;
+  --popover-foreground: #e8dfca;
+  --primary: var(--coral);
+  --primary-foreground: #1a1714;
+  --secondary: #221f1a;
+  --secondary-foreground: #e8dfca;
+  --muted: #221f1a;
+  --muted-foreground: #928b7b;
+  --accent: var(--coral);
+  --accent-foreground: #1a1714;
+  --border: color-mix(in oklab, #928b7b 30%, transparent);
+  --input: color-mix(in oklab, #928b7b 25%, transparent);
+  --mosaic-line-a: rgb(163 113 83 / 18%);
+  --mosaic-line-b: rgb(226 109 90 / 16%);
+  --mosaic-line-c: rgb(232 223 202 / 14%);
+  --mosaic-line-d: rgb(122 79 58 / 12%);
+  --mosaic-opacity: 0.05;
+}
+
+@layer base {
+  * { border-color: var(--color-border); }
+
+  html, body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-serif);
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 600ms ease, color 600ms ease;
+  }
+
+  body { cursor: none; }
+  @media (hover: none) { body { cursor: auto; } }
+
+  ::selection {
+    background: color-mix(in oklab, var(--coral) 35%, transparent);
+    color: var(--ink);
+  }
+}
+
+@layer utilities {
+  .font-serif { font-family: var(--font-serif); }
+  .font-mono { font-family: var(--font-mono); }
+
+  .newspaper-dot-layer {
+    background-image: none;
+    background-repeat: repeat;
+    background-size: 4px 4px;
+    opacity: 0;
+    will-change: opacity;
+  }
+
+  .dark .newspaper-dot-layer {
+    background-image: var(--paper-dot-dark);
+    opacity: 1;
+  }
+
+  .newspaper-line-layer {
+    background-image: none;
+    background-repeat: repeat;
+    opacity: 0;
+    will-change: opacity;
+  }
+
+  .dark .newspaper-line-layer {
+    background-image: repeating-linear-gradient(
+      to bottom,
+      rgb(200 180 150 / 3%) 0 1px,
+      transparent 1px 24px
+    );
+    opacity: 1;
+  }
+
+  .text-ink { color: var(--ink); }
+  .text-charcoal { color: var(--charcoal); }
+  .text-coral { color: var(--coral); }
+  .text-gold { color: var(--gold); }
+  .text-muted-warm { color: var(--muted-warm); }
+  .bg-parchment { background-color: var(--parchment); }
+  .bg-parchment-2 { background-color: var(--parchment-2); }
+  .bg-coral { background-color: var(--coral); }
+  .bg-terracotta { background-color: var(--terracotta); }
+  .bg-gold { background-color: var(--gold); }
+  .border-warm { border-color: color-mix(in oklab, var(--muted-warm) 45%, transparent); }
+  .border-coral { border-color: var(--coral); }
+
+  .glow-coral {
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--coral) 0%, transparent);
+    transition: box-shadow 400ms ease, transform 400ms ease;
+  }
+  .glow-coral:hover {
+    box-shadow: 0 10px 40px -10px color-mix(in oklab, var(--coral) 60%, transparent),
+                0 0 0 1px color-mix(in oklab, var(--coral) 70%, transparent);
+  }
+
+  .editorial-italic { font-style: italic; font-weight: 500; }
+
+  @keyframes float-slow {
+    0%, 100% { transform: translate(0,0) scale(1); }
+    50% { transform: translate(20px,-30px) scale(1.05); }
+  }
+  .animate-float-slow { animation: float-slow 14s ease-in-out infinite; }
+
+  @keyframes pulse-soft {
+    0%, 100% { opacity: 0.6; transform: translateY(0); }
+    50% { opacity: 1; transform: translateY(6px); }
+  }
+  .animate-pulse-soft { animation: pulse-soft 2.2s ease-in-out infinite; }
+
+  .grain-overlay {
+    background-repeat: repeat;
+    background-size: 180px 180px;
+    opacity: 0;
+    will-change: opacity;
+    mix-blend-mode: screen;
+  }
+
+  .dark .grain-overlay {
+    opacity: 0.05;
+  }
+
+  @keyframes ambient-orb-drift-x {
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    50% { transform: translate3d(30px, 0, 0); }
+  }
+
+  @keyframes ambient-orb-pulse {
+    0%, 100% { transform: scale(0.9); }
+    50% { transform: scale(1.1); }
+  }
+
+  @keyframes ambient-orb-breathe {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.06); }
+  }
+
+  @keyframes ambient-mosaic-drift {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    50% { transform: translate3d(24px, -18px, 0) scale(1.015); }
+  }
+
+  .ambient-mosaic-layer {
+    position: absolute;
+    inset: -8%;
+    pointer-events: none;
+    will-change: transform, opacity;
+    background-image:
+      linear-gradient(
+        90deg,
+        var(--mosaic-line-a) 0 1px,
+        transparent 1px 48px
+      ),
+      linear-gradient(
+        var(--mosaic-line-b) 0 1px,
+        transparent 1px 48px
+      ),
+      linear-gradient(
+        90deg,
+        transparent 0 24px,
+        var(--mosaic-line-c) 24px 25px,
+        transparent 25px 48px
+      ),
+      linear-gradient(
+        transparent 0 24px,
+        var(--mosaic-line-d) 24px 25px,
+        transparent 25px 48px
+      );
+    background-size: 48px 48px, 48px 48px, 96px 96px, 96px 96px;
+    background-position: 0 0, 0 0, 0 0, 0 0;
+    mask-image: radial-gradient(circle at center, black 45%, transparent 100%);
+    opacity: var(--mosaic-opacity);
+  }
+
+  .ambient-mosaic-drift {
+    animation: ambient-mosaic-drift 18s ease-in-out infinite;
+  }
+
+  .ambient-surface-orb {
+    position: absolute;
+    border-radius: 9999px;
+    pointer-events: none;
+    will-change: transform, opacity;
+  }
+
+  .ambient-surface-orb-shell {
+    position: absolute;
+    pointer-events: none;
+    will-change: transform, opacity;
+  }
+
+  .ambient-surface-orb-shell-hero {
+    top: -10%;
+    right: -6%;
+    height: 700px;
+    width: 700px;
+    opacity: 0.07;
+  }
+
+  .ambient-surface-orb-hero {
+    inset: 0;
+    filter: blur(120px);
+    background: rgb(226 109 90 / 7%);
+  }
+
+  .ambient-surface-orb-mid {
+    top: 28%;
+    left: -10%;
+    height: 600px;
+    width: 600px;
+    opacity: 0;
+    filter: blur(100px);
+    background: rgb(163 113 83 / 6%);
+  }
+
+  .ambient-surface-orb-skills {
+    right: 8%;
+    bottom: 10%;
+    height: 500px;
+    width: 500px;
+    opacity: 0;
+    filter: blur(90px);
+    background: rgb(226 109 90 / 5%);
+  }
+
+  .ambient-surface-orb-contact {
+    top: 50%;
+    left: 50%;
+    height: 650px;
+    width: 650px;
+    opacity: 0;
+    filter: blur(110px);
+    background: rgb(122 79 58 / 6%);
+    transform: translate(-50%, -50%);
+  }
+
+  .ambient-orb-drift-x {
+    animation: ambient-orb-drift-x 12s ease-in-out infinite;
+  }
+
+  .ambient-orb-pulse {
+    animation: ambient-orb-pulse 10s ease-in-out infinite;
+  }
+
+  .ambient-orb-breathe {
+    animation: ambient-orb-breathe 7s ease-in-out infinite;
+  }
+
+  .ambient-timeline-glow {
+    box-shadow: 0 0 22px color-mix(in oklab, var(--coral) 15%, transparent);
+    animation: ambient-timeline-pulse 4.2s ease-in-out infinite;
+    will-change: transform, opacity;
+  }
+
+  @keyframes ambient-timeline-pulse {
+    0%, 100% {
+      opacity: 0.9;
+      box-shadow: 0 0 18px color-mix(in oklab, var(--coral) 10%, transparent);
+    }
+    50% {
+      opacity: 1;
+      box-shadow: 0 0 30px color-mix(in oklab, var(--coral) 18%, transparent);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ambient-mosaic-layer,
+    .ambient-surface-orb,
+    .ambient-surface-orb-shell,
+    .ambient-timeline-glow,
+    .ambient-orb-drift-x,
+    .ambient-orb-pulse,
+    .ambient-orb-breathe,
+    .ambient-mosaic-drift {
+      animation: none !important;
+    }
+  }
+}
