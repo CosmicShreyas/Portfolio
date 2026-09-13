@@ -1,5 +1,5 @@
-import { motion } from "framer-motion";
-import { useRef } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { useMemo, useRef, useState } from "react";
 import { GlowBlobs } from "./GlowBlobs";
 import { SectionLabel } from "./SectionLabel";
 import { useMarkdownData } from "@/hooks/use-markdown-data";
@@ -7,28 +7,31 @@ import { type ProjectContent, parseProjectsMarkdown } from "@/lib/markdown-conte
 
 const PROJECTS_FALLBACK: ProjectContent[] = [
   {
-    label: "01 / PROFESSIONAL",
-    title: "Vibgyor Presales Talktime",
+    label: "01 / IN DEVELOPMENT",
+    title: "Pocket",
     description:
-      "A multi-surface presales system for Vibgyor spanning dashboard workflows, partner mapping, sales coordination, and a unified backend.",
-    repo: "https://github.com/CosmicShreyas/Vibgyor-Presales-Talktime",
-    live: "#",
-    stack: ["JavaScript", "TypeScript", "HTML", "CSS"],
+      "Pocket lets one person run a whole team of AI helpers from their phone or laptop, with a built-in Chief of Staff assistant keeping them organized and working together.",
+    status: "In active development, nearing launch",
+    repo: "",
+    live: "",
+    stack: ["React 19", "TanStack Start", "Node.js", "MongoDB", "AI Agents"],
   },
   {
-    label: "02 / PROFESSIONAL",
-    title: "Vibgyor Jarvis",
+    label: "02 / IN DEVELOPMENT",
+    title: "NexPath",
     description:
-      "An AI quotation builder and conversational assistant tailored for Vibgyor's internal workflows.",
-    repo: "https://github.com/CosmicShreyas/Vibgyor-Jarvis",
-    live: "#",
-    stack: ["TypeScript", "Python", "JavaScript", "HTML", "CSS"],
+      "An AI career advisor that talks you through career questions the way a real mentor would, plus a clean feed of relevant career and industry news.",
+    status: "In final stages of development",
+    repo: "",
+    live: "",
+    stack: ["React", "Node.js", "LLM Integration", "RAG Pipelines"],
   },
 ];
 
 function ProjectCard({ p, i }: { p: ProjectContent; i: number }) {
   const ref = useRef<HTMLElement>(null);
   const hasLiveLink = p.live.trim() !== "" && p.live.trim() !== "#";
+  const hasRepoLink = p.repo.trim() !== "" && p.repo.trim() !== "#";
 
   const onMove = (e: React.MouseEvent) => {
     const el = ref.current;
@@ -48,8 +51,10 @@ function ProjectCard({ p, i }: { p: ProjectContent; i: number }) {
   return (
     <motion.article
       ref={ref}
+      layout
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.96, transition: { duration: 0.2 } }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{ duration: 0.8, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
       onMouseMove={onMove}
@@ -64,6 +69,8 @@ function ProjectCard({ p, i }: { p: ProjectContent; i: number }) {
         {hasLiveLink ? (
           <a
             href={p.live}
+            target="_blank"
+            rel="noopener noreferrer"
             className="font-mono text-[10px] uppercase tracking-widest text-coral transition-colors hover:text-ink"
           >
             Live {"->"}
@@ -75,6 +82,14 @@ function ProjectCard({ p, i }: { p: ProjectContent; i: number }) {
         {p.title}
         <span className="text-coral">.</span>
       </h3>
+      {p.status ? (
+        <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-coral/40 bg-[color:color-mix(in_oklab,var(--coral)_10%,transparent)] px-3 py-1">
+          <span className="h-1.5 w-1.5 rounded-full bg-coral" />
+          <span className="font-mono text-[10px] uppercase tracking-widest text-coral">
+            {p.status}
+          </span>
+        </div>
+      ) : null}
       <p className="mt-4 max-w-prose font-serif text-base leading-relaxed text-charcoal">
         {p.description}
       </p>
@@ -90,20 +105,53 @@ function ProjectCard({ p, i }: { p: ProjectContent; i: number }) {
         ))}
       </div>
 
-      <div className="mt-8 flex items-center gap-5">
-        <a
-          href={p.repo}
-          className="font-mono text-[11px] uppercase tracking-widest text-charcoal transition-colors hover:text-coral"
-        >
-          GitHub {"->"}
-        </a>
-      </div>
+      {hasRepoLink ? (
+        <div className="mt-8 flex items-center gap-5">
+          <a
+            href={p.repo}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-mono text-[11px] uppercase tracking-widest text-charcoal transition-colors hover:text-coral"
+          >
+            GitHub {"->"}
+          </a>
+        </div>
+      ) : null}
     </motion.article>
   );
 }
 
+/** Reads the category out of a "01 / PROFESSIONAL" style label. */
+function categoryOf(project: ProjectContent) {
+  const [, category = ""] = project.label.split("/");
+  return category.trim() || "OTHER";
+}
+
 export function Projects() {
-  const { data: projects } = useMarkdownData("projects.md", parseProjectsMarkdown, PROJECTS_FALLBACK);
+  const { data: projects } = useMarkdownData(
+    "projects.md",
+    parseProjectsMarkdown,
+    PROJECTS_FALLBACK,
+  );
+  const [active, setActive] = useState("ALL");
+
+  // Categories come from the data, so adding one in projects.md just works.
+  const filters = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const project of projects) {
+      const category = categoryOf(project);
+      counts.set(category, (counts.get(category) ?? 0) + 1);
+    }
+    return [
+      { key: "ALL", count: projects.length },
+      ...[...counts.entries()].map(([key, count]) => ({ key, count })),
+    ];
+  }, [projects]);
+
+  const visible = useMemo(
+    () => (active === "ALL" ? projects : projects.filter((p) => categoryOf(p) === active)),
+    [projects, active],
+  );
 
   return (
     <section id="projects" className="relative py-32 md:py-44">
@@ -123,15 +171,47 @@ export function Projects() {
           transition={{ duration: 0.7 }}
           className="mb-16 max-w-3xl font-serif text-4xl leading-tight md:text-5xl"
         >
-          A handful of <span className="editorial-italic text-coral">recent</span> projects
-          worth talking about<span className="text-coral">.</span>
+          A handful of <span className="editorial-italic text-coral">recent</span> projects worth
+          talking about<span className="text-coral">.</span>
         </motion.h2>
 
-        <div className="grid gap-8 md:grid-cols-2">
-          {projects.map((p, i) => (
-            <ProjectCard key={`${p.label}-${p.title}`} p={p} i={i} />
-          ))}
-        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mb-12 flex flex-wrap items-center gap-2"
+          role="group"
+          aria-label="Filter projects by category"
+        >
+          {filters.map((filter) => {
+            const selected = active === filter.key;
+            return (
+              <button
+                key={filter.key}
+                type="button"
+                onClick={() => setActive(filter.key)}
+                aria-pressed={selected}
+                className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 font-mono text-[10px] uppercase tracking-widest transition-colors duration-200 ${
+                  selected
+                    ? "border-coral bg-[color:color-mix(in_oklab,var(--coral)_14%,transparent)] text-coral"
+                    : "border-warm text-charcoal hover:border-coral hover:text-coral"
+                }`}
+              >
+                {filter.key}
+                <span className="text-[9px] opacity-60">{filter.count}</span>
+              </button>
+            );
+          })}
+        </motion.div>
+
+        <motion.div layout className="grid gap-8 md:grid-cols-2">
+          <AnimatePresence mode="popLayout">
+            {visible.map((p, i) => (
+              <ProjectCard key={`${p.label}-${p.title}`} p={p} i={i} />
+            ))}
+          </AnimatePresence>
+        </motion.div>
       </div>
     </section>
   );

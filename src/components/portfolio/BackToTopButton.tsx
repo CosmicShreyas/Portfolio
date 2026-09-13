@@ -24,7 +24,7 @@ export function BackToTopButton() {
           whileHover={{ scale: 1.1 }}
           transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
           onClick={() => scrollToSection("top")}
-          className="fixed right-6 bottom-6 z-[120] flex h-11 w-11 items-center justify-center rounded-full bg-coral text-[#191814] shadow-[0_12px_36px_-12px_color-mix(in_oklab,var(--coral)_65%,transparent)]"
+          className="fixed right-6 bottom-6 z-[120] flex h-11 w-11 items-center justify-center rounded-full bg-coral text-[color:var(--primary-foreground)] shadow-[0_12px_36px_-12px_color-mix(in_oklab,var(--coral)_65%,transparent)]"
           aria-label="Back to top"
         >
           <ChevronUp className="h-5 w-5 stroke-[2.6]" />

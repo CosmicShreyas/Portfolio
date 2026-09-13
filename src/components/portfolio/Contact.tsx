@@ -12,21 +12,9 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useMarkdownData } from "@/hooks/use-markdown-data";
-import { type AboutContent, parseAboutMarkdown } from "@/lib/markdown-content";
-
-const ABOUT_FALLBACK: AboutContent = {
-  birthDate: "2000-04-02T00:00:00",
-  shippingStartDate: "2026-01-01",
-  githubProfile: "https://github.com/CosmicShreyas",
-  email: "shreyaa@cosmicshreyaa.dev",
-  showEmail: true,
-  resumeLink: "#",
-  ageLabel: "YEARS YOUNG",
-  shippingLabelMonths: "MONTHS SHIPPING",
-  shippingLabelYears: "YEARS SHIPPING",
-  repoLabel: "PROJECTS LIVE",
-  paragraphs: [],
-};
+import { parseAboutMarkdown } from "@/lib/markdown-content";
+import { ABOUT_FALLBACK } from "@/lib/portfolio-data";
+import { ResumeLink } from "./ResumeViewer";
 
 function getGithubUsername(profileUrl: string) {
   const trimmed = profileUrl.trim().replace(/\/+$/, "");
@@ -34,13 +22,15 @@ function getGithubUsername(profileUrl: string) {
   return parts[parts.length - 1] || "";
 }
 
+type SubmitStatus = "idle" | "sending" | "sent" | "error";
+
 export function Contact() {
-  const [sent, setSent] = useState(false);
+  const [status, setStatus] = useState<SubmitStatus>("idle");
   const { data: aboutData } = useMarkdownData("about.md", parseAboutMarkdown, ABOUT_FALLBACK);
   const githubUsername = getGithubUsername(aboutData.githubProfile);
   const socials = [
     { label: "GitHub", href: aboutData.githubProfile },
-    { label: "Resume", href: aboutData.resumeLink },
+    { label: "LinkedIn", href: aboutData.linkedinProfile },
   ].filter((social) => social.href.trim() && social.href.trim() !== "#");
 
   const [form, setForm] = useState({
@@ -51,19 +41,59 @@ export function Contact() {
     message: "",
   });
 
-  const submit = (e: React.FormEvent) => {
+  const resetForm = () =>
+    setForm({
+      name: "",
+      email: "",
+      subject: "",
+      projectType: "New Project",
+      message: "",
+    });
+
+  /**
+   * Posts to the endpoint configured in about.md. With no endpoint set, the
+   * message is handed to the visitor's mail client instead - so the form always
+   * does something real, even on a static host with nothing wired up.
+   */
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSent(true);
-    setTimeout(() => {
-      setSent(false);
-      setForm({
-        name: "",
-        email: "",
-        subject: "",
-        projectType: "New Project",
-        message: "",
+    if (status === "sending") return;
+
+    const endpoint = aboutData.formEndpoint.trim();
+    const body = `${form.message}\n\n---\nProject type: ${form.projectType}\nFrom: ${form.name} <${form.email}>`;
+
+    if (!endpoint) {
+      const href = `mailto:${aboutData.email}?subject=${encodeURIComponent(
+        form.subject,
+      )}&body=${encodeURIComponent(body)}`;
+      window.location.href = href;
+      setStatus("sent");
+      setTimeout(() => setStatus("idle"), 4000);
+      return;
+    }
+
+    setStatus("sending");
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          subject: form.subject,
+          projectType: form.projectType,
+          message: form.message,
+        }),
       });
-    }, 2800);
+
+      if (!response.ok) throw new Error(`Form endpoint responded ${response.status}`);
+
+      setStatus("sent");
+      resetForm();
+      setTimeout(() => setStatus("idle"), 4000);
+    } catch {
+      setStatus("error");
+    }
   };
 
   const fieldShellClass =
@@ -86,7 +116,7 @@ export function Contact() {
         ]}
       />
       <div className="relative mx-auto max-w-7xl px-6 md:px-10">
-        <SectionLabel number="05" label="Contact" />
+        <SectionLabel number="07" label="Contact" />
 
         <div className="grid gap-16 md:grid-cols-12">
           <motion.div
@@ -102,9 +132,9 @@ export function Contact() {
               worth keeping<span className="text-coral">.</span>
             </h2>
             <p className="mt-6 max-w-md font-serif text-lg leading-relaxed text-charcoal">
-              I'm early in my journey and deeply focused on building things that matter. If
-              you're working on something interesting - a product, a tool, an experiment - I'd
-              love to hear about it.
+              I build products end to end and care about the details that make them last. If you're
+              working on something interesting - a product, a platform, a team that needs a hand -
+              I'd love to hear about it.
             </p>
 
             {aboutData.showEmail ? (
@@ -126,11 +156,16 @@ export function Contact() {
                 <a
                   key={s.label}
                   href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="rounded-full border border-warm px-4 py-2 font-mono text-[11px] uppercase tracking-widest text-charcoal transition-colors hover:border-coral hover:text-coral"
                 >
                   {s.label === "GitHub" && githubUsername ? githubUsername : s.label} {"->"}
                 </a>
               ))}
+              <ResumeLink className="rounded-full border border-warm px-4 py-2 font-mono text-[11px] uppercase tracking-widest text-charcoal transition-colors hover:border-coral hover:text-coral">
+                Resume {"->"}
+              </ResumeLink>
             </div>
           </motion.div>
 
@@ -224,13 +259,36 @@ export function Contact() {
               />
             </div>
 
-            <button
-              type="submit"
-              className="group inline-flex items-center gap-3 rounded-full bg-coral px-8 py-4 font-mono text-xs font-semibold uppercase tracking-widest text-[color:var(--primary-foreground)] glow-coral"
-            >
-              {sent ? "Message sent OK" : "Send message"}
-              <span className="transition-transform group-hover:translate-x-1">-&gt;</span>
-            </button>
+            <div className="flex flex-wrap items-center gap-4">
+              <button
+                type="submit"
+                disabled={status === "sending"}
+                className="group inline-flex items-center gap-3 rounded-full bg-coral px-8 py-4 font-mono text-xs font-semibold uppercase tracking-widest text-[color:var(--primary-foreground)] transition-opacity glow-coral disabled:opacity-70"
+              >
+                {status === "sending"
+                  ? "Sending"
+                  : status === "sent"
+                    ? "Message sent"
+                    : "Send message"}
+                <span className="transition-transform group-hover:translate-x-1">-&gt;</span>
+              </button>
+
+              {/* One line of feedback, in the interface's own voice. */}
+              {status === "sent" ? (
+                <span className="font-mono text-[11px] uppercase tracking-widest text-coral">
+                  Thanks - I'll get back to you.
+                </span>
+              ) : null}
+              {status === "error" ? (
+                <span className="font-mono text-[11px] uppercase tracking-widest text-muted-warm">
+                  That didn't send. Email{" "}
+                  <a href={`mailto:${aboutData.email}`} className="text-coral underline">
+                    {aboutData.email}
+                  </a>{" "}
+                  instead.
+                </span>
+              ) : null}
+            </div>
           </motion.form>
         </div>
       </div>

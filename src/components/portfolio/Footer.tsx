@@ -1,29 +1,26 @@
 import { motion } from "framer-motion";
 import { usePortfolioScroll } from "./SmoothScroll";
 import { useMarkdownData } from "@/hooks/use-markdown-data";
-import { type AboutContent, parseAboutMarkdown } from "@/lib/markdown-content";
-import { profile } from "@/lib/portfolio-data";
+import { parseAboutMarkdown } from "@/lib/markdown-content";
+import { ABOUT_FALLBACK, profile } from "@/lib/portfolio-data";
+import { ResumeLink } from "./ResumeViewer";
 
-const ABOUT_FALLBACK: AboutContent = {
-  birthDate: "2000-04-02T00:00:00",
-  shippingStartDate: "2026-01-01",
-  githubProfile: "https://github.com/CosmicShreyas",
-  email: "shreyaa@cosmicshreyas.dev",
-  showEmail: true,
-  resumeLink: "#",
-  ageLabel: "YEARS YOUNG",
-  shippingLabelMonths: "MONTHS SHIPPING",
-  shippingLabelYears: "YEARS SHIPPING",
-  repoLabel: "PROJECTS LIVE",
-  paragraphs: [],
-};
+const footerLinks = [
+  { label: "about", section: "about" },
+  { label: "skills", section: "skills" },
+  { label: "work", section: "projects" },
+  { label: "experience", section: "experience" },
+  { label: "certs", section: "certifications" },
+  { label: "freelance", section: "freelancing" },
+  { label: "contact", section: "contact" },
+] as const;
 
 export function Footer() {
   const { scrollToSection } = usePortfolioScroll();
   const { data: aboutData } = useMarkdownData("about.md", parseAboutMarkdown, ABOUT_FALLBACK);
   const socials = [
     { label: "GitHub", href: aboutData.githubProfile },
-    { label: "Resume", href: aboutData.resumeLink },
+    { label: "LinkedIn", href: aboutData.linkedinProfile },
   ].filter((social) => social.href.trim() && social.href.trim() !== "#");
 
   return (
@@ -45,22 +42,22 @@ export function Footer() {
               <span className="text-coral">.</span>
             </div>
             <p className="mt-2 max-w-xs font-mono text-[11px] uppercase tracking-widest text-muted-warm">
-              FULL-STACK ENGINEER - BASED IN BENGALURU - SHIPPED TO THE WEB
+              FULL-STACK SOFTWARE ENGINEER - BASED IN BENGALURU - SHIPPED TO THE WEB
             </p>
           </div>
 
           <div className="flex flex-wrap gap-5">
-            {["about", "skills", "work", "experience", "contact"].map((l) => (
+            {footerLinks.map(({ label, section }) => (
               <a
-                key={l}
-                href={`#${l === "work" ? "projects" : l}`}
+                key={label}
+                href={`#${section}`}
                 onClick={(event) => {
                   event.preventDefault();
-                  scrollToSection(l === "work" ? "projects" : l);
+                  scrollToSection(section);
                 }}
                 className="font-mono text-[11px] uppercase tracking-widest text-charcoal transition-colors hover:text-coral"
               >
-                /{l}
+                /{label}
               </a>
             ))}
           </div>
@@ -70,11 +67,16 @@ export function Footer() {
               <a
                 key={s.label}
                 href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="font-mono text-[11px] uppercase tracking-widest text-charcoal transition-colors hover:text-coral"
               >
-                {s.label === "Resume" ? "RESUME ->" : s.label}
+                {s.label}
               </a>
             ))}
+            <ResumeLink className="font-mono text-[11px] uppercase tracking-widest text-charcoal transition-colors hover:text-coral">
+              RESUME {"->"}
+            </ResumeLink>
           </div>
         </div>
 

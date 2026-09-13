@@ -46,8 +46,8 @@ export function NotFoundPage({ homeHref }: NotFoundPageProps) {
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             className="mt-6 max-w-[12ch] font-serif text-5xl leading-[0.9] md:text-7xl"
           >
-            A quiet <span className="editorial-italic text-coral">bird</span> stayed on
-            watch, but the page never appeared<span className="text-coral">.</span>
+            A quiet <span className="editorial-italic text-coral">bird</span> stayed on watch, but
+            the page never appeared<span className="text-coral">.</span>
           </motion.h1>
 
           <motion.p
@@ -56,8 +56,8 @@ export function NotFoundPage({ homeHref }: NotFoundPageProps) {
             transition={{ duration: 0.7, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
             className="mt-6 max-w-2xl font-serif text-lg leading-relaxed text-charcoal md:text-xl"
           >
-            This route drifted away somewhere between the address bar and the build.
-            Let&apos;s head back to familiar ground.
+            This route drifted away somewhere between the address bar and the build. Let&apos;s head
+            back to familiar ground.
           </motion.p>
 
           <motion.div

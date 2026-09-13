@@ -3,12 +3,16 @@ import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { usePortfolioScroll } from "./SmoothScroll";
 import { profile } from "@/lib/portfolio-data";
+import { Wordmark } from "./Wordmark";
+import { ThemeToggle } from "./ThemeToggle";
 
 const links = [
   { label: "about", href: "#about", section: "about" },
   { label: "skills", href: "#skills", section: "skills" },
   { label: "work", href: "#projects", section: "projects" },
   { label: "experience", href: "#experience", section: "experience" },
+  { label: "certs", href: "#certifications", section: "certifications" },
+  { label: "freelance", href: "#freelancing", section: "freelancing" },
   { label: "contact", href: "#contact", section: "contact" },
 ] as const;
 
@@ -60,10 +64,10 @@ export function Navbar() {
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
-            className="font-serif text-xl tracking-tight"
+            className="tracking-tight"
+            aria-label={`${profile.name} - back to top`}
           >
-            {profile.name.split(" ")[0]}
-            <span className="text-coral">.</span>
+            <Wordmark name={profile.name.split(" ")[0]} />
           </motion.a>
 
           <ul className="hidden items-center gap-7 md:flex">
@@ -99,9 +103,32 @@ export function Navbar() {
           <motion.div
             initial={{ opacity: 0, x: 10 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.5 }}
-            className="flex items-center md:hidden"
+            transition={{ delay: 0.55 }}
+            className="hidden items-center gap-3 md:flex"
           >
+            <button
+              type="button"
+              onClick={() => {
+                window.dispatchEvent(
+                  new KeyboardEvent("keydown", { key: "k", ctrlKey: true, bubbles: true }),
+                );
+              }}
+              aria-label="Open quick navigation"
+              className="inline-flex items-center gap-2 rounded-full border border-warm px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-muted-warm transition-colors hover:border-coral hover:text-coral"
+            >
+              <span>Jump to</span>
+              <kbd className="rounded border border-warm px-1 py-0.5 text-[9px]">/</kbd>
+            </button>
+            <ThemeToggle />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.5 }}
+            className="flex items-center gap-3 md:hidden"
+          >
+            <ThemeToggle />
             <button
               type="button"
               onClick={() => setMobileOpen((open) => !open)}
@@ -137,7 +164,7 @@ export function Navbar() {
               type="button"
               aria-label="Close menu overlay"
               onClick={closeMobileMenu}
-              className="absolute inset-0 h-full w-full bg-[rgb(25_24_20_/_0.97)]"
+              className="absolute inset-0 h-full w-full bg-[color:color-mix(in_oklab,var(--background)_97%,transparent)]"
             />
 
             <motion.div

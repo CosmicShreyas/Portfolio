@@ -3,23 +3,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { GlowBlobs } from "./GlowBlobs";
 import { SectionLabel } from "./SectionLabel";
 import { useMarkdownData } from "@/hooks/use-markdown-data";
-import { type AboutContent, parseAboutMarkdown } from "@/lib/markdown-content";
-
-const ABOUT_FALLBACK: AboutContent = {
-  birthDate: "2000-04-02T00:00:00",
-  shippingStartDate: "2026-01-01",
-  githubProfile: "https://github.com/CosmicShreyas",
-  email: "shreyaa@cosmicshreyaa.dev",
-  resumeLink: "#",
-  ageLabel: "YEARS YOUNG",
-  shippingLabelMonths: "MONTHS SHIPPING",
-  shippingLabelYears: "YEARS SHIPPING",
-  repoLabel: "PROJECTS LIVE",
-  paragraphs: [
-    "I build software with a systems mindset and a strong bias toward useful, durable products. I care about how things work beneath the surface, and that shows up in the way I approach architecture, product decisions, and the details that make an experience feel solid.",
-    "I work at Vibgyor, where I develop internal tools and client-facing software for the interior design industry. Outside of work, you'll usually find me deep in a Sherlock Holmes novel, sketching ideas in a notebook, or shipping a new experiment to GitHub.",
-  ],
-};
+import { parseAboutMarkdown } from "@/lib/markdown-content";
+import { ABOUT_FALLBACK } from "@/lib/portfolio-data";
 
 function getShippingMetric(startDateString: string, monthsLabel: string, yearsLabel: string) {
   const startDate = new Date(startDateString);
@@ -116,15 +101,22 @@ function Avatar() {
         height="440"
         rx="8"
         fill="none"
-        stroke="#1a1714"
+        stroke="var(--ink)"
         strokeOpacity="0.15"
       />
-      <circle cx="200" cy="180" r="78" fill="#e8dfca" stroke="#1a1714" strokeWidth="1.5" />
+      <circle
+        cx="200"
+        cy="180"
+        r="78"
+        fill="var(--parchment)"
+        stroke="var(--ink)"
+        strokeWidth="1.5"
+      />
       <circle cx="200" cy="180" r="58" fill="#e26d5a" opacity="0.85" />
-      <path d="M80 420 C 120 320, 280 320, 320 420 Z" fill="#1a1714" opacity="0.85" />
+      <path d="M80 420 C 120 320, 280 320, 320 420 Z" fill="var(--ink)" opacity="0.85" />
       <circle cx="320" cy="80" r="22" fill="#e26d5a" opacity="0.9" />
-      <line x1="40" y1="380" x2="120" y2="380" stroke="#1a1714" strokeWidth="1" />
-      <text x="40" y="450" fill="#1a1714" fontFamily="monospace" fontSize="10" opacity="0.7">
+      <line x1="40" y1="380" x2="120" y2="380" stroke="var(--ink)" strokeWidth="1" />
+      <text x="40" y="450" fill="var(--ink)" fontFamily="monospace" fontSize="10" opacity="0.7">
         PORTRAIT / 2025
       </text>
     </svg>
@@ -149,7 +141,11 @@ export function About() {
 
     const id = window.setInterval(() => {
       setShippingMetric(
-        getShippingMetric(data.shippingStartDate, data.shippingLabelMonths, data.shippingLabelYears),
+        getShippingMetric(
+          data.shippingStartDate,
+          data.shippingLabelMonths,
+          data.shippingLabelYears,
+        ),
       );
     }, 60_000);
 
@@ -222,8 +218,8 @@ export function About() {
             className="md:col-span-7"
           >
             <h2 className="font-serif text-4xl leading-tight md:text-5xl">
-              A <span className="editorial-italic text-coral">considered</span> approach to
-              building software that lasts<span className="text-coral">.</span>
+              A <span className="editorial-italic text-coral">considered</span> approach to building
+              software that lasts<span className="text-coral">.</span>
             </h2>
             <p className="mt-6 font-serif text-lg leading-relaxed text-charcoal">
               {data.paragraphs[0] ?? ABOUT_FALLBACK.paragraphs[0]}

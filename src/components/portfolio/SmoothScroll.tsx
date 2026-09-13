@@ -4,7 +4,15 @@ import { useReducedMotion } from "framer-motion";
 import Lenis from "lenis";
 
 const NAVBAR_OFFSET = -80;
-const sectionIds = ["about", "skills", "projects", "experience", "contact"] as const;
+const sectionIds = [
+  "about",
+  "skills",
+  "projects",
+  "experience",
+  "certifications",
+  "freelancing",
+  "contact",
+] as const;
 
 export type PortfolioSectionId = (typeof sectionIds)[number];
 
@@ -53,7 +61,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
 
     const updateActiveSection = () => {
       const marker = window.scrollY + 120;
-      let nextActive = sectionIds[0];
+      let nextActive: PortfolioSectionId = sectionIds[0];
 
       for (const id of sectionIds) {
         const element = document.getElementById(id);

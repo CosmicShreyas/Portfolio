@@ -6,6 +6,9 @@ import { IntroLoader } from "@/components/portfolio/IntroLoader";
 import { NewspaperTexture } from "@/components/portfolio/NewspaperTexture";
 import { ScrollProgress } from "@/components/portfolio/ScrollProgress";
 import { SmoothScroll } from "@/components/portfolio/SmoothScroll";
+import { ResumeViewerProvider } from "@/components/portfolio/ResumeViewer";
+import { ThemeProvider } from "@/components/portfolio/ThemeToggle";
+import { CommandPalette } from "@/components/portfolio/CommandPalette";
 import { CustomCursor } from "@/components/portfolio/CustomCursor";
 import { Navbar } from "@/components/portfolio/Navbar";
 import { Hero } from "@/components/portfolio/Hero";
@@ -13,6 +16,8 @@ import { About } from "@/components/portfolio/About";
 import { Skills } from "@/components/portfolio/Skills";
 import { Projects } from "@/components/portfolio/Projects";
 import { Experience } from "@/components/portfolio/Experience";
+import { Certifications } from "@/components/portfolio/Certifications";
+import { Freelancing } from "@/components/portfolio/Freelancing";
 import { Contact } from "@/components/portfolio/Contact";
 import { Footer } from "@/components/portfolio/Footer";
 import { NotFoundPage } from "@/components/portfolio/NotFoundPage";
@@ -35,7 +40,8 @@ function resolveMissingPath() {
 
   const { hostname, pathname, search, hash } = window.location;
   const params = new URLSearchParams(search);
-  const redirectedPath = params.get("notfound") || sessionStorage.getItem("portfolio:not-found-path");
+  const redirectedPath =
+    params.get("notfound") || sessionStorage.getItem("portfolio:not-found-path");
   const isLocalhost = hostname === "localhost" || hostname === "127.0.0.1";
 
   if (redirectedPath) {
@@ -43,7 +49,11 @@ function resolveMissingPath() {
     if (params.has("notfound")) {
       params.delete("notfound");
       const nextSearch = params.toString();
-      window.history.replaceState({}, "", `${pathname}${nextSearch ? `?${nextSearch}` : ""}${hash}`);
+      window.history.replaceState(
+        {},
+        "",
+        `${pathname}${nextSearch ? `?${nextSearch}` : ""}${hash}`,
+      );
     }
     return redirectedPath;
   }
@@ -64,28 +74,35 @@ export default function App() {
   }
 
   return (
-    <SmoothScroll>
-      <div className="relative isolate bg-parchment text-ink">
-        <IntroLoader />
-        <ScrollProgress />
-        <NewspaperTexture />
-        <AmbientBackground />
-        <GrainOverlay />
-        <CustomCursor />
-        <Navbar />
-        <div className="relative z-10">
-          <main>
-            <Hero />
-            <About />
-            <Skills />
-            <Projects />
-            <Experience />
-            <Contact />
-          </main>
-          <Footer />
-        </div>
-        <BackToTopButton />
-      </div>
-    </SmoothScroll>
+    <ThemeProvider>
+      <SmoothScroll>
+        <ResumeViewerProvider>
+          <div className="relative isolate bg-parchment text-ink">
+            <IntroLoader />
+            <ScrollProgress />
+            <NewspaperTexture />
+            <AmbientBackground />
+            <GrainOverlay />
+            <CustomCursor />
+            <Navbar />
+            <div className="relative z-10">
+              <main>
+                <Hero />
+                <About />
+                <Skills />
+                <Projects />
+                <Experience />
+                <Certifications />
+                <Freelancing />
+                <Contact />
+              </main>
+              <Footer />
+            </div>
+            <BackToTopButton />
+            <CommandPalette />
+          </div>
+        </ResumeViewerProvider>
+      </SmoothScroll>
+    </ThemeProvider>
   );
 }

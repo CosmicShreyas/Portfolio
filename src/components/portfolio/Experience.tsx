@@ -8,23 +8,24 @@ import { type ExperienceEntry, parseExperienceMarkdown } from "@/lib/markdown-co
 const EXPERIENCE_FALLBACK: ExperienceEntry[] = [
   {
     kind: "experience",
-    company: "Vibgyor",
-    role: "Software Developer",
-    dates: "2025 - PRESENT",
+    company: "Vibgyor Interiors",
+    role: "Software Engineer",
+    dates: "JAN 2025 - PRESENT",
+    location: "Bengaluru, India (on-site)",
     bullets: [
-      "Building internal tools and client-facing software for the interior design and presales workflow",
-      "Developing Python and Node.js backends plus REST APIs for real-time communication features",
-      "Owning large parts of the stack from database design to frontend delivery",
+      "Building GlideProject, a B2B partner-management platform, using React 19, TypeScript, TanStack Start, Node.js, Express, MongoDB, and Cloudflare Workers, with Razorpay-powered payments",
+      "Developing, testing, debugging, and documenting software solutions for interior design and partner workflows",
+      "Running code reviews and troubleshooting production issues to keep releases high-quality and reliable",
     ],
   },
   {
     kind: "education",
-    company: "University",
-    role: "Computer Science Student",
-    dates: "",
+    company: "MES PU College of Arts, Commerce & Science",
+    role: "Computer Science",
+    dates: "GRADUATED",
+    location: "",
     bullets: [
-      "Studying core computer science concepts including programming, data structures, problem-solving, and software fundamentals",
-      "Applying classroom learning through hands-on full-stack projects, automation work, and practical product building",
+      "Studied core computer science concepts including programming, data structures, problem-solving, and software fundamentals",
     ],
   },
 ];
@@ -56,8 +57,8 @@ export function Experience() {
           transition={{ duration: 0.7 }}
           className="mb-20 max-w-3xl font-serif text-4xl leading-tight md:text-5xl"
         >
-          Years of <span className="editorial-italic text-coral">hands-on</span> building
-          across products and systems<span className="text-coral">.</span>
+          Years of <span className="editorial-italic text-coral">hands-on</span> building across
+          products and systems<span className="text-coral">.</span>
         </motion.h2>
 
         <div ref={ref} className="relative pl-10 md:pl-20">
@@ -95,6 +96,11 @@ export function Experience() {
                   {e.dates ? (
                     <span className="font-mono text-[11px] uppercase tracking-widest text-muted-warm">
                       {e.dates}
+                    </span>
+                  ) : null}
+                  {e.location ? (
+                    <span className="font-mono text-[11px] tracking-wide text-muted-warm/80">
+                      {e.location}
                     </span>
                   ) : null}
                   {e.kind === "education" ? (

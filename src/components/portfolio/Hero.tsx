@@ -1,8 +1,10 @@
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { useEffect, useState } from "react";
+import { Linkedin } from "lucide-react";
 import { GlowBlobs } from "./GlowBlobs";
 import { usePortfolioScroll } from "./SmoothScroll";
 import { profile } from "@/lib/portfolio-data";
+import { ResumeLink } from "./ResumeViewer";
 
 const headingWords: { text: string; italic?: boolean }[] = [
   { text: "I" },
@@ -109,7 +111,11 @@ function DesktopComputerIllustration() {
           fill="var(--gold)"
           opacity="0.18"
         />
-        <path d="M463 219h30v17h-30zM463 248h30v17h-30zM463 277h30v17h-30z" fill="var(--coral)" opacity="0.22" />
+        <path
+          d="M463 219h30v17h-30zM463 248h30v17h-30zM463 277h30v17h-30z"
+          fill="var(--coral)"
+          opacity="0.22"
+        />
         <path
           d="M214 154h222c17 0 30 13 30 30v16H184v-16c0-17 13-30 30-30Z"
           fill="currentColor"
@@ -235,6 +241,18 @@ export function Hero() {
           >
             Get in touch
           </a>
+          <ResumeLink className="inline-flex items-center gap-2 rounded-full border border-warm px-7 py-3.5 font-mono text-xs uppercase tracking-widest text-ink transition-colors hover:border-coral hover:text-coral">
+            View resume
+          </ResumeLink>
+          <a
+            href={profile.linkedinUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="LinkedIn profile"
+            className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-warm text-ink transition-colors hover:border-coral hover:text-coral"
+          >
+            <Linkedin className="h-4 w-4" />
+          </a>
         </motion.div>
       </div>
 
@@ -249,7 +267,11 @@ export function Hero() {
           <span className="absolute inset-x-1 top-1 h-5 rounded-full bg-[linear-gradient(180deg,color-mix(in_oklab,var(--coral)_18%,transparent),transparent)] opacity-80" />
           <motion.span
             animate={{ y: [0, 22, 0], opacity: [0.95, 0.45, 0.95] }}
-            transition={{ duration: 1.8, repeat: Number.POSITIVE_INFINITY, ease: [0.22, 1, 0.36, 1] }}
+            transition={{
+              duration: 1.8,
+              repeat: Number.POSITIVE_INFINITY,
+              ease: [0.22, 1, 0.36, 1],
+            }}
             className="relative block h-2.5 w-2.5 rounded-full bg-coral shadow-[0_0_16px_color-mix(in_oklab,var(--coral)_60%,transparent)]"
           />
         </div>

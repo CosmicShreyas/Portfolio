@@ -7,28 +7,42 @@ import { type SkillsGroup, parseSkillsMarkdown } from "@/lib/markdown-content";
 const SKILLS_FALLBACK: SkillsGroup[] = [
   {
     category: "Frontend",
-    subtitle: "React + Tailwind · Primary UI stack",
-    items: ["React", "TypeScript", "JavaScript", "TailwindCSS", "Vite", "HTML/CSS", "Framer Motion"],
-  },
-  {
-    category: "Backend",
-    subtitle: "Python-first · FastAPI & Node.js",
-    items: ["Python", "FastAPI", "Node.js", "Express", "REST APIs", "PostgreSQL", "SQLite"],
-  },
-  {
-    category: "AI & ML",
-    subtitle: "Growing focus · ML pipelines & integrations",
+    subtitle: "React 19 + TypeScript · Primary UI stack",
     items: [
-      "Machine Learning",
-      "Python (NumPy, Pandas, Scikit-learn)",
-      "Data Pipelines",
-      "Model Integration",
+      "React 19",
+      "TypeScript",
+      "Angular",
+      "TanStack Start",
+      "System Design",
+      "UI Development",
     ],
   },
   {
-    category: "Tools & DevOps",
-    subtitle: "Daily drivers · Git-heavy workflow",
-    items: ["Git", "GitHub", "Docker (learning)", "VS Code", "Figma (basic)", "Vercel", "Linux"],
+    category: "Backend",
+    subtitle: "Node.js-first · APIs & edge runtimes",
+    items: ["Node.js", "Express", "MongoDB", "Cloudflare Workers", "Razorpay", "SQL"],
+  },
+  {
+    category: "AI & ML",
+    subtitle: "5+ years · Agentic architectures",
+    items: [
+      "Prompt Engineering",
+      "LLM Integration",
+      "AI Agent Architecture",
+      "RAG Pipelines",
+      "Claude Code",
+      "Codex",
+    ],
+  },
+  {
+    category: "Languages",
+    subtitle: "Core toolset · Daily drivers",
+    items: ["Java", "Python", "JavaScript", "TypeScript", "SQL"],
+  },
+  {
+    category: "Practices",
+    subtitle: "How the work gets shipped",
+    items: ["API Integration", "Agile / Scrum", "Code Review", "Mentoring", "DevOps"],
   },
 ];
 
@@ -48,11 +62,11 @@ export function Skills() {
           transition={{ duration: 0.7 }}
           className="mb-16 max-w-3xl font-serif text-4xl leading-tight md:text-5xl"
         >
-          A toolkit shaped by years of <span className="editorial-italic text-coral">shipping</span>,
-          not just experimenting<span className="text-coral">.</span>
+          A toolkit shaped by years of <span className="editorial-italic text-coral">shipping</span>
+          , not just experimenting<span className="text-coral">.</span>
         </motion.h2>
 
-        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           {skills.map((group, gi) => (
             <motion.div
               key={group.category}
@@ -63,7 +77,7 @@ export function Skills() {
             >
               <div className="mb-5 flex items-baseline gap-3">
                 <span className="font-mono text-[10px] uppercase tracking-widest text-coral">
-                  0{gi + 1}
+                  {String(gi + 1).padStart(2, "0")}
                 </span>
                 <h3 className="font-serif text-xl text-ink">{group.category}</h3>
               </div>

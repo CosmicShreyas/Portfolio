@@ -31,16 +31,16 @@ export function IntroLoader() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-          className="fixed inset-0 z-[10000] flex items-center justify-center bg-[#191814]"
+          className="fixed inset-0 z-[10000] flex items-center justify-center bg-[color:var(--background)]"
           aria-hidden
         >
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
-            className="font-serif text-7xl tracking-tight text-[color:var(--parchment)] md:text-8xl"
+            className="font-serif text-7xl tracking-tight text-ink md:text-8xl"
           >
-            A<span className="text-coral">.</span>
+            S<span className="text-coral">.</span>
           </motion.div>
         </motion.div>
       ) : null}

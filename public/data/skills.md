@@ -1,39 +1,46 @@
 ## Frontend
-React + Tailwind + Vite · Primary UI stack
-- React
+React 19 + TypeScript · Primary UI stack
+- React 19
 - TypeScript
-- JavaScript
+- Angular
+- TanStack Start
+- System Design
+- UI Development
 - TailwindCSS
-- Vite
-- HTML/CSS
-- Framer Motion
 
 ## Backend
-Python-first · FastAPI & Node.js
-- Python
-- FastAPI
+Node.js-first · APIs & edge runtimes
 - Node.js
 - Express
-- REST APIs
-- PostgreSQL
-- SQLite
 - MongoDB
+- Cloudflare Workers
+- Razorpay
+- SQL
+- REST APIs
 
 ## AI & ML
-Growing focus · ML pipelines & integrations
-- Machine Learning
-- Python (NumPy, Pandas, Scikit-learn)
-- Data Pipelines
-- Model Integration
-- Large Language Models
-- TTS and STT Models
-
-## Tools & DevOps
-Daily drivers · Git-heavy workflow
-- Git
-- GitHub
+5+ years · Agentic architectures
+- Prompt Engineering
+- LLM Integration
+- AI Agent Architecture
+- RAG Pipelines
 - Claude Code
-- Codex and Cursor
-- VS Code
-- Vercel
-- Linux
+- Codex
+- Machine Learning
+
+## Languages
+Core toolset · Daily drivers
+- Java
+- Python
+- JavaScript
+- TypeScript
+- SQL
+
+## Practices
+How the work gets shipped
+- API Integration
+- Agile / Scrum
+- Code Review
+- Mentoring
+- DevOps
+- Cybersecurity
