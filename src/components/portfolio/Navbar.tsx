@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { usePortfolioScroll } from "./SmoothScroll";
 import { profile } from "@/lib/portfolio-data";
+import { useModalLock } from "@/hooks/use-modal-lock";
 import { Wordmark } from "./Wordmark";
 import { ThemeToggle } from "./ThemeToggle";
 
@@ -10,6 +11,7 @@ const links = [
   { label: "about", href: "#about", section: "about" },
   { label: "skills", href: "#skills", section: "skills" },
   { label: "work", href: "#projects", section: "projects" },
+  { label: "demos", href: "#live-demos", section: "live-demos" },
   { label: "experience", href: "#experience", section: "experience" },
   { label: "certs", href: "#certifications", section: "certifications" },
   { label: "freelance", href: "#freelancing", section: "freelancing" },
@@ -20,20 +22,19 @@ export function Navbar() {
   const { activeSection, scrollToSection } = usePortfolioScroll();
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  // Stops Lenis and locks the body. `touchAction` is handled here rather than in
+  // the hook: it is specific to the mobile sheet, which is the only popup that
+  // must also block touch panning behind itself.
+  useModalLock({ open: mobileOpen, onEscape: () => setMobileOpen(false) });
+
   useEffect(() => {
-    if (typeof document === "undefined") return;
+    if (typeof document === "undefined" || !mobileOpen) return;
 
     const { body } = document;
-    const previousOverflow = body.style.overflow;
     const previousTouchAction = body.style.touchAction;
-
-    if (mobileOpen) {
-      body.style.overflow = "hidden";
-      body.style.touchAction = "none";
-    }
+    body.style.touchAction = "none";
 
     return () => {
-      body.style.overflow = previousOverflow;
       body.style.touchAction = previousTouchAction;
     };
   }, [mobileOpen]);

@@ -1,15 +1,8 @@
 import { AnimatePresence, motion } from "framer-motion";
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-  type ReactNode,
-} from "react";
+import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
 import { Download, ExternalLink, X } from "lucide-react";
 import { useMarkdownData } from "@/hooks/use-markdown-data";
+import { useModalLock } from "@/hooks/use-modal-lock";
 import { parseAboutMarkdown, resolveAssetPath } from "@/lib/markdown-content";
 import { ABOUT_FALLBACK } from "@/lib/portfolio-data";
 
@@ -35,25 +28,10 @@ export function ResumeViewerProvider({ children }: { children: ReactNode }) {
 
   const closeResume = useCallback(() => setOpen(false), []);
 
-  // Lock the page behind the modal and allow Escape to dismiss it.
-  useEffect(() => {
-    if (!open || typeof document === "undefined") return;
-
-    const { body } = document;
-    const previousOverflow = body.style.overflow;
-    body.style.overflow = "hidden";
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setOpen(false);
-    };
-
-    window.addEventListener("keydown", onKeyDown);
-
-    return () => {
-      body.style.overflow = previousOverflow;
-      window.removeEventListener("keydown", onKeyDown);
-    };
-  }, [open]);
+  // Locks the page behind the modal, stops Lenis so the wheel no longer scrolls
+  // it, hands back the system cursor (the PDF renders in an <object>, which
+  // swallows our mousemove events) and wires Escape to dismiss.
+  useModalLock({ open, systemCursor: true, onEscape: closeResume });
 
   const value = useMemo<ResumeViewerContextValue>(
     () => ({ resumeUrl, openResume, closeResume }),

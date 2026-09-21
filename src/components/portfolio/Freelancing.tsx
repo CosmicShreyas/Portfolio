@@ -132,7 +132,7 @@ export function Freelancing() {
         ]}
       />
       <div className="relative mx-auto max-w-7xl px-6 md:px-10">
-        <SectionLabel number="06" label="Freelancing" />
+        <SectionLabel number="07" label="Freelancing" />
 
         <div className="mb-16 grid gap-8 md:grid-cols-12">
           <motion.h2

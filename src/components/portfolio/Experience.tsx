@@ -48,7 +48,7 @@ export function Experience() {
     <section id="experience" className="relative py-32 md:py-44">
       <GlowBlobs blobs={[{ color: "gold", size: 520, top: "20%", left: "60%", opacity: 0.05 }]} />
       <div className="relative mx-auto max-w-7xl px-6 md:px-10">
-        <SectionLabel number="04" label="Experience" />
+        <SectionLabel number="05" label="Experience" />
 
         <motion.h2
           initial={{ opacity: 0, y: 20 }}

@@ -111,7 +111,7 @@ export function Certifications() {
     <section id="certifications" className="relative py-32 md:py-44">
       <GlowBlobs blobs={[{ color: "gold", size: 460, top: "15%", left: "-12%", opacity: 0.06 }]} />
       <div className="relative mx-auto max-w-7xl px-6 md:px-10">
-        <SectionLabel number="05" label={data.heading} />
+        <SectionLabel number="06" label={data.heading} />
 
         <div className="mb-16 flex flex-wrap items-end justify-between gap-8">
           <motion.h2

@@ -138,6 +138,42 @@
     cursor: none !important;
   }
 
+  /* Over embedded content the system cursor comes back.
+
+     An <iframe> (the live demos) or an <object> (the resume PDF) renders in its
+     own context and swallows the parent page's mousemove events, so the custom
+     cursor freezes at the edge of the embed and the visitor is left with no
+     pointer at all over the content. The events never reach us, so following
+     them is not an option — handing the real cursor back is the fix.
+
+     `data-demo-open` is kept as an alias so the live-demo modal keeps working. */
+  body[data-system-cursor="true"],
+  body[data-system-cursor="true"] *,
+  body[data-system-cursor="true"] *::before,
+  body[data-system-cursor="true"] *::after,
+  body[data-demo-open="true"],
+  body[data-demo-open="true"] *,
+  body[data-demo-open="true"] *::before,
+  body[data-demo-open="true"] *::after {
+    cursor: auto !important;
+  }
+
+  body[data-system-cursor="true"] a,
+  body[data-system-cursor="true"] button,
+  body[data-system-cursor="true"] [data-cursor="hover"],
+  body[data-demo-open="true"] a,
+  body[data-demo-open="true"] button,
+  body[data-demo-open="true"] [data-cursor="hover"] {
+    cursor: pointer !important;
+  }
+
+  /* ...and the custom glyph goes away, so there is never a second pointer
+     stranded beside the real one. */
+  body[data-system-cursor="true"] [data-custom-cursor],
+  body[data-demo-open="true"] [data-custom-cursor] {
+    opacity: 0 !important;
+  }
+
   /* Touch devices have no custom cursor, so give the system one back. */
   @media (hover: none) {
     body,

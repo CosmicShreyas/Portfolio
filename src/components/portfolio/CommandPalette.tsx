@@ -5,6 +5,7 @@ import { usePortfolioScroll, type PortfolioSectionId } from "./SmoothScroll";
 import { useResumeViewer } from "./ResumeViewer";
 import { useTheme } from "./ThemeToggle";
 import { useMarkdownData } from "@/hooks/use-markdown-data";
+import { useModalLock } from "@/hooks/use-modal-lock";
 import {
   parseAboutMarkdown,
   parseFiverrMarkdown,
@@ -19,6 +20,7 @@ const SECTIONS: { id: PortfolioSectionId | "top"; label: string }[] = [
   { id: "about", label: "About" },
   { id: "skills", label: "Skills" },
   { id: "projects", label: "Selected Work" },
+  { id: "live-demos", label: "Try It Live" },
   { id: "experience", label: "Experience" },
   { id: "certifications", label: "Certifications" },
   { id: "freelancing", label: "Freelancing" },
@@ -77,16 +79,10 @@ export function CommandPalette() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [open]);
 
-  // Hold the page still behind the palette.
-  useEffect(() => {
-    if (!open) return;
-    const { body } = document;
-    const previous = body.style.overflow;
-    body.style.overflow = "hidden";
-    return () => {
-      body.style.overflow = previous;
-    };
-  }, [open]);
+  // Hold the page still behind the palette. Escape is handled in the key
+  // listener above, alongside the shortcut that opens it, so it is not wired
+  // here as well.
+  useModalLock({ open });
 
   const run = (action: () => void) => {
     setOpen(false);

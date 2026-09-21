@@ -1,4 +1,12 @@
-import { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import type { ReactNode } from "react";
 import { useReducedMotion } from "framer-motion";
 import Lenis from "lenis";
@@ -8,6 +16,7 @@ const sectionIds = [
   "about",
   "skills",
   "projects",
+  "live-demos",
   "experience",
   "certifications",
   "freelancing",
@@ -21,6 +30,15 @@ type ScrollTarget = PortfolioSectionId | "top";
 type SmoothScrollContextValue = {
   activeSection: PortfolioSectionId;
   scrollToSection: (target: ScrollTarget) => void;
+  /**
+   * Pauses or resumes Lenis.
+   *
+   * Lenis listens for wheel events on the window and scrolls the page from its
+   * own animation loop, so `body { overflow: hidden }` does not stop it — a
+   * wheel over an open dialog still scrolled the page underneath. Modals hold
+   * this locked for as long as they are open.
+   */
+  setScrollLocked: (locked: boolean) => void;
 };
 
 const SmoothScrollContext = createContext<SmoothScrollContextValue | null>(null);
@@ -28,6 +46,10 @@ const SmoothScrollContext = createContext<SmoothScrollContextValue | null>(null)
 export function SmoothScroll({ children }: { children: ReactNode }) {
   const prefersReducedMotion = useReducedMotion();
   const lenisRef = useRef<Lenis | null>(null);
+  // Locks are counted, not boolean: one popup can open another (the resume
+  // opens from the command palette), and the inner one closing must not hand
+  // scrolling back while the outer one is still up.
+  const lockCountRef = useRef(0);
   const [activeSection, setActiveSection] = useState<PortfolioSectionId>("about");
 
   useEffect(() => {
@@ -40,6 +62,11 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     });
 
     lenisRef.current = lenis;
+
+    // Lenis is recreated when the reduced-motion preference changes. If that
+    // happens while a dialog is open, the fresh instance must come up stopped
+    // or the page starts scrolling behind it again.
+    if (lockCountRef.current > 0) lenis.stop();
 
     let raf = 0;
     const loop = (time: number) => {
@@ -95,9 +122,18 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     };
   }, []);
 
+  const setScrollLocked = useCallback((locked: boolean) => {
+    lockCountRef.current = Math.max(0, lockCountRef.current + (locked ? 1 : -1));
+    const lenis = lenisRef.current;
+    if (!lenis) return;
+    if (lockCountRef.current > 0) lenis.stop();
+    else lenis.start();
+  }, []);
+
   const value = useMemo<SmoothScrollContextValue>(
     () => ({
       activeSection,
+      setScrollLocked,
       scrollToSection: (target) => {
         if (typeof window === "undefined") return;
 
@@ -123,7 +159,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
         lenisRef.current.scrollTo(element, { offset: NAVBAR_OFFSET });
       },
     }),
-    [activeSection, prefersReducedMotion],
+    [activeSection, prefersReducedMotion, setScrollLocked],
   );
 
   return <SmoothScrollContext.Provider value={value}>{children}</SmoothScrollContext.Provider>;

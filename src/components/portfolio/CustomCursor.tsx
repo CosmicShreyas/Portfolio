@@ -170,6 +170,7 @@ export function CustomCursor() {
   return (
     <div
       ref={cursorRef}
+      data-custom-cursor
       className="pointer-events-none fixed left-0 top-0 z-[12000] h-8 w-8 transition-opacity duration-200"
       style={{
         opacity: visible ? 1 : 0,

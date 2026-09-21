@@ -15,6 +15,7 @@ import { Hero } from "@/components/portfolio/Hero";
 import { About } from "@/components/portfolio/About";
 import { Skills } from "@/components/portfolio/Skills";
 import { Projects } from "@/components/portfolio/Projects";
+import { LiveDemos } from "@/components/portfolio/LiveDemos";
 import { Experience } from "@/components/portfolio/Experience";
 import { Certifications } from "@/components/portfolio/Certifications";
 import { Freelancing } from "@/components/portfolio/Freelancing";
@@ -91,6 +92,7 @@ export default function App() {
                 <About />
                 <Skills />
                 <Projects />
+                <LiveDemos />
                 <Experience />
                 <Certifications />
                 <Freelancing />
